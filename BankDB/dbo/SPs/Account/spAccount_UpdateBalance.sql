@@ -5,7 +5,7 @@ AS
 BEGIN
 
 update Account
-set Balance = Balance - @Amount
+set Balance = Balance + @Amount
 where aId = @AccountId
 
 END;

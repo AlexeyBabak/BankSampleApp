@@ -79,6 +79,9 @@
     <Build Include="dbo\SPs\Account\spAccount_GetAll.sql" />
     <Build Include="dbo\SPs\Account\spAccount_Get.sql" />
     <Build Include="dbo\SPs\Account\spAccount_GetByClient.sql" />
+    <Build Include="dbo\SPs\Transaction\spTransaction_Get.sql" />
+    <Build Include="dbo\SPs\Transaction\spTransaction_GetAll.sql" />
+    <Build Include="dbo\SPs\Transaction\spTransaction_GetByAccount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

@@ -12,19 +12,51 @@ class Program
         using IHost host = CreateHostBuilder(args).Build();
 
         var clientService = host.Services.GetRequiredService<ClientService>();
+        var accountService = host.Services.GetRequiredService<AccountService>();
+        var transactionService = host.Services.GetRequiredService<TransactionService>();
 
-        Console.WriteLine("Adding a new client...");
+        // Create and set first Client
         await clientService.AddClient("John", "Doe", true);
 
-        Console.WriteLine("Listing all clients:");
-        var clients = await clientService.GetAllClients();
-        foreach (var client in clients)
+        var firstClient = await clientService.GetClientById(2);
+        if (firstClient != null)
         {
-            Console.WriteLine($"{client.FirstName} {client.LastName} - Verified: {client.IsVerified}");
+            await accountService.AddAccount(1000, 1.5M, firstClient.Id);
+            await accountService.AddAccount(5000, 2.0M, firstClient.Id);
+        }
+        else
+        {
+            Console.WriteLine("No clients found to add accounts.");
         }
 
-        var firstClient = await clientService.GetClientById(1);
-        Console.WriteLine($"{firstClient?.FirstName} {firstClient?.LastName} - Verified: {firstClient?.IsVerified}");
+        var account1 = await accountService.GetAccountById(1);
+        if (account1 != null)
+        {
+            await accountService.UpdateInterestRate(1, 5.0M);
+        }
+        else
+        {
+            Console.WriteLine("No such account to update interest rate.");
+        }
+
+        if (account1 != null)
+        {
+            await accountService.Deposit(1,1000M);
+        }
+        else
+        {
+            Console.WriteLine("No such account.");
+        }
+
+        var account2 = await accountService.GetAccountById(2);
+        if (account2 != null)
+        {
+            await accountService.Withdrawal(2, 1000M);
+        }
+        else
+        {
+            Console.WriteLine("No such account.");
+        }
 
         await host.RunAsync();
     }
@@ -38,8 +70,13 @@ class Program
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build());
             services.AddTransient<ISqlDataAccess, SqlDataAccess>();
+
             services.AddTransient<IClientData, ClientData>();
+            services.AddTransient<IAccountData, AccountData>();
+            services.AddTransient<ITransactionData, TransactionData>();
 
             services.AddTransient<ClientService>();
+            services.AddTransient<AccountService>();
+            services.AddTransient<TransactionService>();
         });
 }
