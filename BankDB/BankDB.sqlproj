@@ -60,18 +60,25 @@
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\SPs" />
     <Folder Include="dbo\SPs\Client" />
+    <Folder Include="dbo\SPs\Account" />
+    <Folder Include="dbo\SPs\Transaction" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Account.sql" />
     <Build Include="dbo\Tables\Client.sql" />
     <Build Include="dbo\Tables\LTransactionType.sql" />
     <Build Include="dbo\Tables\Transaction.sql" />
-    <Build Include="dbo\SPs\spAccount_Insert.sql" />
-    <Build Include="dbo\SPs\spTransaction_Insert.sql" />
     <Build Include="dbo\SPs\Client\spClient_GetAll.sql" />
     <Build Include="dbo\SPs\Client\spClient_Insert.sql" />
     <Build Include="dbo\SPs\Client\spClient_Get.sql" />
     <Build Include="dbo\SPs\Client\spClient_Delete.sql" />
+    <Build Include="dbo\SPs\Account\spAccount_Insert.sql" />
+    <Build Include="dbo\SPs\Account\spAccount_UpdateBalance.sql" />
+    <Build Include="dbo\SPs\Account\spAccount_UpdateInterestRate.sql" />
+    <Build Include="dbo\SPs\Transaction\spTransaction_Insert.sql" />
+    <Build Include="dbo\SPs\Account\spAccount_GetAll.sql" />
+    <Build Include="dbo\SPs\Account\spAccount_Get.sql" />
+    <Build Include="dbo\SPs\Account\spAccount_GetByClient.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

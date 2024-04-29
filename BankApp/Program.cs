@@ -13,8 +13,8 @@ class Program
 
         var clientService = host.Services.GetRequiredService<ClientService>();
 
-        //Console.WriteLine("Adding a new client...");
-        //await clientService.AddClient("John", "Doe", true);
+        Console.WriteLine("Adding a new client...");
+        await clientService.AddClient("John", "Doe", true);
 
         Console.WriteLine("Listing all clients:");
         var clients = await clientService.GetAllClients();
@@ -24,7 +24,7 @@ class Program
         }
 
         var firstClient = await clientService.GetClientById(1);
-        Console.WriteLine($"{firstClient.FirstName} {firstClient.LastName} - Verified: {firstClient.IsVerified}");
+        Console.WriteLine($"{firstClient?.FirstName} {firstClient?.LastName} - Verified: {firstClient?.IsVerified}");
 
         await host.RunAsync();
     }

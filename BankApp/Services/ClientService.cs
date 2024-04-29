@@ -14,12 +14,7 @@ public class ClientService
 
     public async Task AddClient(string firstName, string lastName, bool isVerified)
     {
-        var newClient = new ClientModel
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            IsVerified = isVerified
-        };
+        var newClient = new ClientModel(firstName, lastName, isVerified);
 
         await _clientData.InsertClient(newClient);
     }
