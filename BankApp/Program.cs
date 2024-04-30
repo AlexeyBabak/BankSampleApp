@@ -1,4 +1,5 @@
-﻿using BankApp.Services;
+﻿using BankApp;
+using BankApp.Services;
 using DataAccess.Data;
 using DataAccess.DbAccess;
 using Microsoft.Extensions.Configuration;
@@ -15,48 +16,17 @@ class Program
         var accountService = host.Services.GetRequiredService<AccountService>();
         var transactionService = host.Services.GetRequiredService<TransactionService>();
 
-        // Create and set first Client
-        await clientService.AddClient("John", "Doe", true);
+        var bankingWorkflow = new BankingWorkflow(clientService, accountService, transactionService);
+        await bankingWorkflow.Run();
 
-        var firstClient = await clientService.GetClientById(2);
-        if (firstClient != null)
-        {
-            await accountService.AddAccount(1000, 1.5M, firstClient.Id);
-            await accountService.AddAccount(5000, 2.0M, firstClient.Id);
-        }
-        else
-        {
-            Console.WriteLine("No clients found to add accounts.");
-        }
+        // Show the data:
+        var displayService = new DisplayWorkflow(clientService, accountService, transactionService);
 
-        var account1 = await accountService.GetAccountById(1);
-        if (account1 != null)
-        {
-            await accountService.UpdateInterestRate(1, 5.0M);
-        }
-        else
-        {
-            Console.WriteLine("No such account to update interest rate.");
-        }
+        await displayService.ShowAllClients();
+        await displayService.ShowAllAccounts();
 
-        if (account1 != null)
-        {
-            await accountService.Deposit(1,1000M);
-        }
-        else
-        {
-            Console.WriteLine("No such account.");
-        }
-
-        var account2 = await accountService.GetAccountById(2);
-        if (account2 != null)
-        {
-            await accountService.Withdrawal(2, 1000M);
-        }
-        else
-        {
-            Console.WriteLine("No such account.");
-        }
+        await displayService.ShowClientAccounts(2); // set this
+        await displayService.ShowAccountTransactions(1); // set this
 
         await host.RunAsync();
     }

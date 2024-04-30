@@ -1,18 +1,13 @@
 ﻿using DataAccess.Data;
 using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BankApp.Services;
 
 public class TransactionService
 {
-    private readonly TransactionData _transactionData;
+    private readonly ITransactionData _transactionData;
 
-    public TransactionService(TransactionData transactionData)
+    public TransactionService(ITransactionData transactionData)
     {
         _transactionData = transactionData;
     }

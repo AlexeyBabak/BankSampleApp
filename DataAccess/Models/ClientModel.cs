@@ -3,17 +3,17 @@
 namespace DataAccess.Models;
 public class ClientModel
 {
-    public int Id { get; set; }
+    public int cId { get; set; }
 
-    [Required]
     [StringLength(50)]
     public string? FirstName { get; set; }
     
-    [Required]
     [StringLength(50)]
     public string? LastName { get; set; }
 
     public bool IsVerified { get; set; }
+
+    public ClientModel() { }
 
     public ClientModel(string firstName, string lastName, bool isVerified)
     {

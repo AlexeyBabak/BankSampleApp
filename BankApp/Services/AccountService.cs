@@ -1,5 +1,6 @@
 ﻿using DataAccess.Data;
 using DataAccess.Models;
+using System.Transactions;
 
 namespace BankApp.Services;
 
@@ -29,6 +30,11 @@ public class AccountService
     public async Task<AccountModel?> GetAccountById(int accountId)
     {
         return await _accountData.GetAccount(accountId);
+    }
+
+    public async Task<IEnumerable<AccountModel>> GetAccountsByClientId(int clientId)
+    {
+        return await _accountData.GetAccountsByClient(clientId);
     }
 
     public async Task UpdateInterestRate(int accountId, decimal interestRate)
@@ -64,6 +70,48 @@ public class AccountService
         await UpdateBalance(accountId, -amount);
 
         await _transactionService.AddTransaction(amount, TransactionType.Withdrawal, accountId);
+    }
+
+    public async Task Transfer(int fromAccountId, int toAccountId, decimal amount)
+    {
+        if (amount <= 0)
+        {
+            throw new ArgumentException("Transfer amount must be positive.");
+        }
+
+        var fromAccount = await _accountData.GetAccount(fromAccountId);
+        var toAccount = await _accountData.GetAccount(toAccountId);
+
+        if (fromAccount == null || toAccount == null)
+        {
+            throw new InvalidOperationException("One or both accounts not found.");
+        }
+
+        if (fromAccount.aId == toAccount.aId)
+        {
+            throw new ArgumentException("Cannot transfer to the same account.");
+        }
+
+        if (fromAccount.ClientId != toAccount.ClientId)
+        {
+            throw new InvalidOperationException("Transfers are only allowed between accounts of the same client.");
+        }
+
+        if (fromAccount.Balance < amount)
+        {
+            throw new InvalidOperationException("Insufficient funds in the source account.");
+        }
+
+        using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await _accountData.UpdateAccountBalance(fromAccountId, -amount);
+            await _accountData.UpdateAccountBalance(toAccountId, amount);
+
+            await _transactionService.AddTransaction(-amount, TransactionType.Transfer, fromAccountId);
+            await _transactionService.AddTransaction(amount, TransactionType.Transfer, toAccountId);
+
+            transaction.Complete();
+        }
     }
 
     private async Task UpdateBalance(int accountId, decimal amount)

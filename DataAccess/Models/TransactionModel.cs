@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DataAccess.Models;
 public class TransactionModel
 {
-    public int Id { get; set; }
+    public int tId { get; set; }
 
     [Required]
     public DateTime TransactionDate { get; set; }
@@ -33,6 +33,10 @@ public class TransactionModel
         Amount = amount;
         TransactionType = transactionType;
         AccountId = accountId;
+    }
+
+    public TransactionModel()
+    {
     }
 }
 

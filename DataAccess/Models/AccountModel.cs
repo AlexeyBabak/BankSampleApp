@@ -3,7 +3,7 @@
 namespace DataAccess.Models;
 public class AccountModel
 {
-    public int Id { get; set; }
+    public int aId { get; set; }
 
     [Required]
     [DataType(DataType.Currency)]
@@ -30,5 +30,9 @@ public class AccountModel
         Balance = balance;
         InterestRate = interestRate;
         ClientId = clientId;
+    }
+
+    public AccountModel()
+    {
     }
 }
